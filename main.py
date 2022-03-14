@@ -42,8 +42,8 @@ def get_xpath_by_text(tree, text):
                 new_lang_url = influenced_lang.get("href")
                 influenced_lang_urls.append(new_lang_url)
 
-        # for ll in influenced_lang_urls:
-        #     get_lang(ll)
+        for ll in influenced_lang_urls:
+            get_lang(ll)
 
         return influenced_lang_urls
     except:
