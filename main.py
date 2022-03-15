@@ -50,4 +50,9 @@ def get_xpath_by_text(tree, text):
         return []
 
 
-get_lang('/wiki/Python_(programming_language)')
+def main():
+    get_lang('/wiki/Python_(programming_language)')
+
+
+if __name__ == '__main__':
+    main()
