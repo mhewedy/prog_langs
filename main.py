@@ -1,7 +1,7 @@
 from urllib import request
 from lxml import etree
 
-base_url = 'https://en.wikipedia.org'
+BASE_URL = 'https://en.wikipedia.org'
 visited = []
 
 
@@ -11,7 +11,7 @@ def get_lang(lang_url):
 
     visited.append(lang_url)
 
-    with request.urlopen(base_url + lang_url) as response:
+    with request.urlopen(BASE_URL + lang_url) as response:
         html = response.read()
         tree = etree.HTML(html)
         influenced = get_influenced(tree)
@@ -35,17 +35,15 @@ def get_xpath_by_text(tree, text):
         influenced = tree.xpath(f"//*[text() = '{text}']")[0]
         influenced_langs = influenced.getparent().getnext().findall(".//a")
 
-        influenced_lang_urls = []
+        urls = []
 
         for influenced_lang in influenced_langs:
             if influenced_lang.getparent().tag != 'sup' and influenced_lang.text is not None:
-                new_lang_url = influenced_lang.get("href")
-                influenced_lang_urls.append(new_lang_url)
+                url = influenced_lang.get("href")
+                urls.append(url)
+                get_lang(url)
 
-        for ll in influenced_lang_urls:
-            get_lang(ll)
-
-        return influenced_lang_urls
+        return urls
     except:
         return []
 
