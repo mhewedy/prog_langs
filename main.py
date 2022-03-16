@@ -1,3 +1,4 @@
+from sys import *
 from urllib import request
 from lxml import etree
 
@@ -14,25 +15,25 @@ def get_lang(lang_url):
     with request.urlopen(BASE_URL + lang_url) as response:
         html = response.read()
         tree = etree.HTML(html)
-        influenced = get_influenced(tree)
-        influenced_by = get_influenced_by(tree)
+        influenced = get_influenced(lang_url, tree)
+        influenced_by = get_influenced_by(lang_url, tree)
 
         print("language: " + lang_url +
               " ,influenced: " + str(influenced) +
               " ,influenced_by: " + str(influenced_by))
 
 
-def get_influenced(tree):
-    return get_xpath_by_text(tree, 'Influenced')
+def get_influenced(lang, tree):
+    return get_xpath_by_text(lang, tree, 'Influenced')
 
 
-def get_influenced_by(tree):
-    return get_xpath_by_text(tree, 'Influenced by')
+def get_influenced_by(lang, tree):
+    return get_xpath_by_text(lang, tree, 'Influenced by')
 
 
-def get_xpath_by_text(tree, text):
+def get_xpath_by_text(lang, tree, action):
     try:
-        influenced = tree.xpath(f"//*[text() = '{text}']")[0]
+        influenced = tree.xpath(f"//*[text() = '{action}']")[0]
         influenced_langs = influenced.getparent().getnext().findall(".//a")
 
         urls = []
@@ -45,6 +46,7 @@ def get_xpath_by_text(tree, text):
 
         return urls
     except:
+        stderr.write(f'lang: {lang}, action: {action}, error: {str(exc_info()[1])}\n')
         return []
 
 
