@@ -1,4 +1,4 @@
-from sys import *
+import sys
 from urllib import request
 from lxml import etree
 
@@ -46,7 +46,7 @@ def get_xpath_by_text(lang, tree, action):
 
         return urls
     except:
-        stderr.write(f'lang: {lang}, action: {action}, error: {str(exc_info()[1])}\n')
+        print(f'lang: {lang}, action: {action}, error: {str(sys.exc_info()[1])}', file=sys.stderr)
         return []
 
 
